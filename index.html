@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Search and filter New Jersey municipality codes. Find information about municipalities across all NJ counties."
+    />
+    <meta
+      name="keywords"
+      content="New Jersey, NJ, Municipality Codes, County Codes, Municipal Government, New Jersey Counties"
+    />
+    <meta name="author" content="Ariel Nathan" />
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="New Jersey Municipality Codes" />
+    <meta
+      property="og:description"
+      content="Search and filter New Jersey municipality codes. Find information about municipalities across all NJ counties."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://njcodes.arielnathan.com" />
+
+    <!-- Robots Meta Tag -->
+    <meta name="robots" content="index, follow" />
+    <title>New Jersey Municipality Codes</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.22/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-base-200 p-8">
+    <main class="max-w-6xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6 text-base-content" id="pageTitle">
+        New Jersey Municipality Codes
+      </h1>
+      <p class="mb-6 text-sm text-base-content/70">
+        Data sources:
+        <a
+          href="https://www.nj.gov/treasury/taxation/pdf/lpt/cntycode.pdf"
+          class="link"
+          target="_blank"
+          rel="noopener noreferrer"
+          >NJ Treasury Taxation</a
+        >
+        and
+        <a
+          href="https://www.nj.gov/treasury/omb/pdf/forms/municodes.pdf"
+          class="link"
+          target="_blank"
+          rel="noopener noreferrer"
+          >NJ Treasury OMB</a
+        >
+      </p>
+
+      <section class="mb-6 flex gap-4" aria-labelledby="searchControls">
+        <h2 class="sr-only" id="searchControls">Search and Filter Controls</h2>
+        <div class="flex-1">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search..."
+            class="input input-bordered w-full"
+            aria-label="Search municipalities"
+          />
+        </div>
+        <div>
+          <select
+            id="countyFilter"
+            class="select select-bordered w-full"
+            aria-label="Filter by county"
+          >
+            <option value="">All Counties</option>
+          </select>
+        </div>
+      </section>
+
+      <section aria-labelledby="resultsTitle">
+        <h2 class="sr-only" id="resultsTitle">Municipality Results</h2>
+        <div class="card bg-base-100 shadow-xl">
+          <div class="overflow-x-auto">
+            <table
+              class="min-w-full table table-zebra"
+              aria-label="Municipality Codes"
+            >
+              <thead>
+                <tr>
+                  <th class="text-left" scope="col">Code</th>
+                  <th class="text-left" scope="col">Name</th>
+                  <th class="text-left" scope="col">County</th>
+                </tr>
+              </thead>
+              <tbody id="municipalityTable">
+                <!-- Data will be inserted here -->
+                <tr>
+                  <td colspan="3" class="text-center">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <button
+        id="backToTop"
+        class="btn btn-circle btn-primary fixed bottom-8 right-8 opacity-0 invisible transition-all duration-300"
+        aria-label="Back to top"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 10l7-7m0 0l7 7m-7-7v18"
+          />
+        </svg>
+      </button>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
