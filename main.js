@@ -60,9 +60,39 @@ async function initializeData() {
       renderTable(filteredData);
     }
 
+    // Add download CSV functionality
+    function downloadCsv() {
+      // Convert data to CSV
+      const headers = ["Code", "Name", "County"];
+      const csvContent = [
+        headers.join(","),
+        ...municipalities.map(
+          (m) =>
+            `${m.code},"${m.name.replace(/"/g, '""')}","${m.county.replace(
+              /"/g,
+              '""'
+            )}"`
+        ),
+      ].join("\n");
+
+      // Create download link
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "nj-municipalities.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     // Add event listeners
     searchInput.addEventListener("input", filterData);
     countyFilter.addEventListener("change", filterData);
+    document
+      .getElementById("downloadCsv")
+      .addEventListener("click", downloadCsv);
 
     // Initial render
     renderTable(municipalities);
