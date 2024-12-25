@@ -1,4 +1,4 @@
-export const municipalities = [
+const municipalities = [
   {
     code: "1301",
     name: "Aberdeen Twp.",

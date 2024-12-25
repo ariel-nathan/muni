@@ -4,9 +4,6 @@ const tableBody = document.getElementById("municipalityTable");
 const countyFilter = document.getElementById("countyFilter");
 const clearSearchButton = document.getElementById("clearSearch");
 
-// Import municipalities data
-import { municipalities } from "./municipalities.js";
-
 // Initialize data
 function initializeData() {
   try {
