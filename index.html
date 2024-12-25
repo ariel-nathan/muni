@@ -60,13 +60,35 @@
         <h2 class="sr-only" id="searchControls">Search and Filter Controls</h2>
         <div class="flex flex-col sm:flex-row gap-4">
           <div class="flex-1">
-            <input
-              type="text"
-              id="searchInput"
-              placeholder="Search..."
-              class="input input-bordered w-full"
-              aria-label="Search municipalities"
-            />
+            <div class="relative">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search..."
+                class="input input-bordered w-full"
+                aria-label="Search municipalities"
+              />
+              <button
+                id="clearSearch"
+                class="absolute right-2 top-0 bottom-0 my-auto btn btn-ghost btn-sm btn-circle hidden"
+                aria-label="Clear search"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
           <div class="flex gap-4">
             <select
@@ -149,6 +171,6 @@
         </svg>
       </button>
     </main>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

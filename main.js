@@ -2,13 +2,14 @@
 const searchInput = document.getElementById("searchInput");
 const tableBody = document.getElementById("municipalityTable");
 const countyFilter = document.getElementById("countyFilter");
+const clearSearchButton = document.getElementById("clearSearch");
 
-// Load and initialize data
-async function initializeData() {
+// Import municipalities data
+import { municipalities } from "./municipalities.js";
+
+// Initialize data
+function initializeData() {
   try {
-    const response = await fetch("./municipalities.json");
-    const municipalities = await response.json();
-
     // Get unique counties for the filter dropdown
     const counties = [...new Set(municipalities.map((m) => m.county))].sort();
 
@@ -27,17 +28,27 @@ async function initializeData() {
         resultCount === 1 ? "municipality" : "municipalities"
       }`;
 
-      tableBody.innerHTML = data
-        .map(
-          (municipality) => `
-        <tr role="row">
-          <td role="cell">${municipality.code}</td>
-          <td role="cell">${municipality.name}</td>
-          <td role="cell">${municipality.county}</td>
-        </tr>
-      `
-        )
-        .join("");
+      if (resultCount === 0) {
+        tableBody.innerHTML = `
+          <tr role="row">
+            <td colspan="3" class="px-6 py-4 text-center text-gray-500">
+              No municipalities found matching your search criteria.
+            </td>
+          </tr>
+        `;
+      } else {
+        tableBody.innerHTML = data
+          .map(
+            (municipality) => `
+          <tr role="row">
+            <td role="cell">${municipality.code}</td>
+            <td role="cell">${municipality.name}</td>
+            <td role="cell">${municipality.county}</td>
+          </tr>
+        `
+          )
+          .join("");
+      }
 
       // Update the aria-live region with the result count
       document.getElementById("resultsTitle").textContent = announcement;
@@ -88,18 +99,30 @@ async function initializeData() {
     }
 
     // Add event listeners
-    searchInput.addEventListener("input", filterData);
+    searchInput.addEventListener("input", () => {
+      filterData();
+      // Show/hide clear button based on search input
+      clearSearchButton.classList.toggle("hidden", !searchInput.value);
+    });
     countyFilter.addEventListener("change", filterData);
     document
       .getElementById("downloadCsv")
       .addEventListener("click", downloadCsv);
 
+    // Clear search functionality
+    clearSearchButton.addEventListener("click", () => {
+      searchInput.value = "";
+      filterData();
+      clearSearchButton.classList.add("hidden");
+      searchInput.focus();
+    });
+
     // Initial render
     renderTable(municipalities);
   } catch (error) {
-    console.error("Error loading municipality data:", error);
+    console.error("Error initializing municipality data:", error);
     tableBody.innerHTML =
-      '<tr><td colspan="3" class="px-6 py-4 text-center text-red-500">Error loading municipality data</td></tr>';
+      '<tr><td colspan="3" class="px-6 py-4 text-center text-red-500">Error initializing municipality data</td></tr>';
   }
 }
 
