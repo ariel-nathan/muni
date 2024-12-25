@@ -3,6 +3,7 @@ const searchInput = document.getElementById("searchInput");
 const tableBody = document.getElementById("municipalityTable");
 const countyFilter = document.getElementById("countyFilter");
 const clearSearchButton = document.getElementById("clearSearch");
+const showHistoricalCheckbox = document.getElementById("showHistorical");
 
 // Initialize data
 function initializeData() {
@@ -35,15 +36,10 @@ function initializeData() {
         `;
       } else {
         tableBody.innerHTML = data
-          .map(
-            (municipality) => `
-          <tr role="row">
-            <td role="cell">${municipality.code}</td>
-            <td role="cell">${municipality.name}</td>
-            <td role="cell">${municipality.county}</td>
-          </tr>
-        `
-          )
+          .map((municipality) => {
+            const row = formatMunicipalityRow(municipality);
+            return row.outerHTML;
+          })
           .join("");
       }
 
@@ -55,6 +51,7 @@ function initializeData() {
     function filterData() {
       const searchTerm = searchInput.value.toLowerCase();
       const selectedCounty = countyFilter.value;
+      const showHistorical = showHistoricalCheckbox.checked;
 
       const filteredData = municipalities.filter((municipality) => {
         const matchesSearch =
@@ -62,7 +59,8 @@ function initializeData() {
           municipality.code.includes(searchTerm);
         const matchesCounty =
           !selectedCounty || municipality.county === selectedCounty;
-        return matchesSearch && matchesCounty;
+        const matchesHistorical = showHistorical || !municipality.inactive;
+        return matchesSearch && matchesCounty && matchesHistorical;
       });
 
       renderTable(filteredData);
@@ -102,6 +100,7 @@ function initializeData() {
       clearSearchButton.classList.toggle("hidden", !searchInput.value);
     });
     countyFilter.addEventListener("change", filterData);
+    showHistoricalCheckbox.addEventListener("change", filterData);
     document
       .getElementById("downloadCsv")
       .addEventListener("click", downloadCsv);
@@ -145,3 +144,74 @@ backToTopButton.addEventListener("click", () => {
     behavior: "smooth",
   });
 });
+
+// When displaying municipalities, filter out inactive ones by default
+const activeMunicipalities = municipalities.filter((m) => !m.inactive);
+
+// Or if you want to show them with a visual indicator:
+function formatMunicipalityRow(municipality) {
+  const row = document.createElement("tr");
+  row.setAttribute("role", "row");
+
+  if (municipality.inactive) {
+    row.classList.add("opacity-50"); // Add visual styling for inactive
+
+    // Find the current municipality it merged into
+    const currentMunicipality = municipalities.find(
+      (m) => m.code === municipality.mergedInto
+    );
+    const mergedName = currentMunicipality
+      ? currentMunicipality.name
+      : "Unknown";
+
+    row.innerHTML = `
+      <td role="cell">${municipality.code}</td>
+      <td role="cell">
+        ${municipality.name}
+        <span class="text-sm text-gray-500">
+          (Merged into <a href="#${municipality.mergedInto}" 
+            class="link link-hover" 
+            onclick="highlightMunicipality('${municipality.mergedInto}')"
+          >${mergedName}</a> as of Jan 1, 2013)
+        </span>
+      </td>
+      <td role="cell">${municipality.county}</td>
+    `;
+  } else if (municipality.formerCodes) {
+    // Add subtle indicator for municipalities that were formed from mergers
+    row.innerHTML = `
+      <td role="cell">${municipality.code}</td>
+      <td role="cell">
+        ${municipality.name}
+        <span class="text-sm text-gray-500">
+          (Formed from merger of ${municipality.formerCodes.join(", ")})
+        </span>
+      </td>
+      <td role="cell">${municipality.county}</td>
+    `;
+    row.id = municipality.code; // Add ID for linking
+  } else {
+    row.innerHTML = `
+      <td role="cell">${municipality.code}</td>
+      <td role="cell">${municipality.name}</td>
+      <td role="cell">${municipality.county}</td>
+    `;
+  }
+
+  return row;
+}
+
+// Add this function to highlight the merged municipality when clicked
+function highlightMunicipality(code) {
+  // Remove any existing highlights
+  document.querySelectorAll("tr.highlight").forEach((row) => {
+    row.classList.remove("highlight", "bg-base-200");
+  });
+
+  // Find and highlight the target row
+  const targetRow = document.getElementById(code);
+  if (targetRow) {
+    targetRow.classList.add("highlight", "bg-base-200");
+    targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}

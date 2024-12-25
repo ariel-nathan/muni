@@ -31,6 +31,11 @@
       type="text/css"
     />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      tr.highlight {
+        transition: background-color 0.3s ease;
+      }
+    </style>
   </head>
   <body class="min-h-screen bg-base-200 p-8">
     <main class="max-w-6xl mx-auto">
@@ -119,6 +124,16 @@
               </svg>
               CSV
             </button>
+          </div>
+          <div class="form-control">
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">Show Historical</span>
+              <input
+                type="checkbox"
+                id="showHistorical"
+                class="checkbox checkbox-sm"
+              />
+            </label>
           </div>
         </div>
       </section>

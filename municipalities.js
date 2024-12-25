@@ -2028,11 +2028,22 @@ const municipalities = [
     code: "1109",
     name: "Princeton Bor.",
     county: "Mercer",
+    inactive: true,
+    mergedInto: "1114",
   },
   {
     code: "1110",
     name: "Princeton Twp.",
     county: "Mercer",
+    inactive: true,
+    mergedInto: "1114",
+  },
+  {
+    code: "1114",
+    name: "Princeton",
+    county: "Mercer",
+    formerCodes: ["1109", "1110"],
+    effectiveDate: "2013-01-01",
   },
   {
     code: "1610",
